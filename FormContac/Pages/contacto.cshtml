@@ -1,0 +1,96 @@
+﻿@page
+@model FormContac.Pages.contactoModel
+@{
+}
+<h1>Agregar Contactos</h1>
+
+<form id="contactForm" method="post">
+    <div>
+    <label for="nombre">
+        Nombre:
+    </label>
+    <input class="form-control" type="text" id="nombre" name="nombre" required/>
+    </div>
+
+    <div>
+        <label for="correo">
+            Correo:
+        </label>
+        <input class="form-control" type="email" id="correo" name="correo" required />
+    </div>
+    <div>
+        <label for="comentario">
+            comentario
+        </label>
+        <textarea class="form-control" type="text" id="comentario" name="comentario" required>
+        </textarea>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">
+        Enviar
+    </button>
+
+    @section Scripts{
+
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+
+        <script>
+            $(function () {
+                $('#contactForm').validate({
+                    rules: {
+                        //nombre: "required",
+                        nombre: {
+                            required: true,
+                            minlength: 4,
+                            maxlength: 10
+                        },
+                        email: {
+                            required: true,
+                            email: true
+                        },
+                        comentario: "required"
+                    },
+                    messages: {
+                        //nombre: "Por favor ingrese su nombre",
+                        nombre: {
+                               required: "por favor ingrese su nombre",
+                               minlength: jQuery.validator.format("debe tener minimo 4 letras"),
+                               maxlength: jQuery.validator.format("No pasar de las 10 letras")
+                        },
+                        correo: {
+                            required: "Por favor ingrese su correo electrónico",
+                            correo: "Por favor ingrese un correo electrónico válido"
+                        },
+                        comentario: "Por favor ingrese su mensaje"
+                    },
+                    errorClass: "is-invalid",
+                    validClass: "is-valid",
+                    errorElement: "div",
+                    errorPlacement: function (error, element) {
+                        error.addClass("invalid-feedback");
+                        error.insertAfter(element);
+                    },
+                    success: function (label, element) {
+                        $(element).addClass("is-valid");
+                        $(element).next('.invalid-feedback').remove();
+                    },
+                    highlight: function (element, errorClass, validClass) {
+                        $(element).addClass(errorClass).removeClass(validClass);
+                        $(element).next('.invalid-feedback').remove();
+                    },
+                    unhighlight: function (element, errorClass, validClass) {
+                        $(element).addClass(validClass).removeClass(errorClass);
+                        $(element).next('.invalid-feedback').remove();
+                    },
+                    submitHandler: function (form) {
+                        // Aquí puedes agregar la lógica para enviar el formulario utilizando AJAX
+                        alert('Formulario enviado exitosamente!');
+                        form.submit();
+                    }
+                });
+            });
+        </script>
+    }
+</form>
